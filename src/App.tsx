@@ -1,6 +1,4 @@
 import { ChangeEvent, useRef, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import ReCaptcha from 'react-google-recaptcha';
 import { login } from './utils/api-communicator';
