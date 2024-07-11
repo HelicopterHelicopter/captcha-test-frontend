@@ -2,7 +2,6 @@ import axios from 'axios';
 
 export const login = async (username:string,password:string,captchaToken:string) => {
     try{
-        console.log("inn");
         const res = await axios.post("http://localhost:5000/api/auth/login",{
             username:username,
             password:password,
@@ -11,6 +10,21 @@ export const login = async (username:string,password:string,captchaToken:string)
         if(res.status!==200){
             throw new Error("Invalid credentials");
         }
+        const data = await res.data;
+        console.log(data);
+        return data;
+    }catch(err){
+        return null;
+    }
+}
+
+export const getCaptcha = async () => {
+    try{
+        const res = await axios.get("http://localhost:5000/api/captcha");
+        if(res.status!==200){
+            throw new Error("Error in fetching svg");
+        }
+
         const data = await res.data;
         console.log(data);
         return data;
