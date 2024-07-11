@@ -1,39 +1,47 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { getCaptcha } from "../utils/api-communicator";
+import { Box, Button, TextField } from "@mui/material";
 
+interface CaptchaProps {
+    handleCaptchaChange: (captcha: string) => void;
+}
 
-const Captcha = (handleCaptchaChange:any) => {
-    
-    const [captchaImage,setCaptchaImage] = useState("");
-    const [captchaText,setCaptchaText] = useState("");
+const Captcha = ({ handleCaptchaChange }: CaptchaProps) => {
+
+    const [captchaImage, setCaptchaImage] = useState("");
+    const [captchaText, setCaptchaText] = useState("");
 
     const fetchCaptcha = async () => {
-        try{
+        try {
             const data = await getCaptcha();
-            if(data.status){
+            if (data.status) {
                 setCaptchaImage(data.data.svgData);
                 setCaptchaText("");
             }
-        }catch(err){
+        } catch (err) {
 
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchCaptcha();
-    },[]);
+    }, []);
 
-    const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.value);
         setCaptchaText(e.target.value);
         handleCaptchaChange(e.target.value);
     }
 
     return (
-        <div>
-            <img src={`data:image/svg+xml;utf8,${encodeURIComponent(captchaImage)}`}/>
-            <input type="text" value={captchaText} onChange={handleChange}/>
-            <button type="button" onClick={fetchCaptcha}>Refresh</button>
-        </div>
+        <Box sx={{ display: "flex", gap: 2, mt: 1, border: "1px solid white", p: 2, flexDirection: "column" }}>
+            <img src={`data:image/svg+xml;utf8,${encodeURIComponent(captchaImage)}`} />
+            <Box sx={{ display: "flex",gap:2,justifyContent:"center" }}>
+                <TextField label="Captcha" type="text" value={captchaText} onChange={handleChange} />
+                <Button variant="contained" type="button" onClick={fetchCaptcha}>Refresh</Button>
+            </Box>
+
+        </Box>
     );
 }
 
