@@ -1,6 +1,7 @@
 import { ChangeEvent, useRef, useState } from "react";
 import ReCaptcha from "react-google-recaptcha";
 import { login } from "../utils/api-communicator";
+import { Button, Container, TextField } from "@mui/material";
 
 const Google = () => {
 
@@ -25,20 +26,18 @@ const Google = () => {
     }
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor='username'>Username: </label>
-                <input type='text' id='username' onChange={(e) => setUsername(e.target.value)} />
-                <label htmlFor='password'>Password: </label>
-                <input id='password' type='password' onChange={(e) => setPassword(e.target.value)} />
+        <Container>
+            <form onSubmit={handleSubmit} style={{display:"flex",flexDirection:"column",gap:4}}>
+                <TextField label='Username' type='text' id='username' onChange={(e) => setUsername(e.target.value)} />
+                <TextField label='Password' id='password' type='password' onChange={(e) => setPassword(e.target.value)} />
                 <ReCaptcha
                     sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                     ref={captchaRef}
                 />
-                <button type='submit'>Submit</button>
+                <Button type='submit' variant="contained">Submit</Button>
                 {error && <p>{error}</p>}
             </form>
-        </div>
+        </Container>
     );
 }
 

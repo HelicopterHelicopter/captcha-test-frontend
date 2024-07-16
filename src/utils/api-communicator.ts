@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 axios.defaults.withCredentials=true;
+axios.defaults.baseURL = 'https://recaptcha.poc.farmart.farm/api';
 
 export const login = async (username:string,password:string,captchaToken:string) => {
     try{
-        const res = await axios.post("http://localhost:5000/api/auth/login",{
+        const res = await axios.post("/auth/login-google",{
             username:username,
             password:password,
             captchaToken:captchaToken
@@ -22,7 +23,7 @@ export const login = async (username:string,password:string,captchaToken:string)
 
 export const loginCustom = async (username:string,password:string,captcha:string) => {
     try{
-        const res = await axios.post("http://localhost:5000/api/auth/login-custom",{
+        const res = await axios.post("/auth/login-custom",{
             username:username,
             password:password,
             captcha:captcha
@@ -40,7 +41,7 @@ export const loginCustom = async (username:string,password:string,captcha:string
 
 export const getCaptcha = async () => {
     try{
-        const res = await axios.get("http://localhost:5000/api/captcha");
+        const res = await axios.get("/captcha/");
         if(res.status!==200){
             throw new Error("Error in fetching svg");
         }
@@ -52,3 +53,34 @@ export const getCaptcha = async () => {
         return null;
     }
 }
+
+export const loginAWS = async(username:string,password:string) => {
+    try{
+        console.log("echec");
+        const res = await axios.post("/auth/login-aws",{
+            username:username,
+            password:password
+        });
+        console.log(res.status);
+        if(res.status===405){
+            throw new Error("Invalid credentials");
+        }
+        const data = await res.data;
+        console.log(data);
+        return data;
+    }catch(err){
+        console.log(err);
+        return null;
+    }
+}
+
+// export const loginAWSCaptcha = async(username:string,password:string) => {
+//      const result = await AwsWafIntegration.fetch("https://recaptcha.poc.farmart.farm/api/auth/login-aws",{
+//         method:"POST"
+//      });
+
+//      if(result.status===405){
+        
+//      }
+//      console.log(result);
+// }
